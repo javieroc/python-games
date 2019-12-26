@@ -5,6 +5,14 @@ height = 500
 rows = 20
 window = pygame.display.set_mode((width, height))
 
+
+class Snake(object):
+
+    def __init__(self, color, pos):
+        self.color = color
+        self.head = cube(pos)
+        self.body.append(self.head)
+
 def drawGrid():
     dw = width // rows
     x = 0
