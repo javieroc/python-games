@@ -11,16 +11,19 @@ class Cube(object):
     rows = 20
     width = 500
 
-    def __init__(self, start, dirnx=1, dirny=0, color=(255,0,0)):
+    def __init__(self, start, color=(255,0,0)):
         self.pos = start
         self.dirnx = 1
         self.dirny = 0
         self.color = color
 
 
-    def move(self, dirnx, dirny):
+    def setDir(self, dirnx, dirny):
         self.dirnx = dirnx
         self.dirny = dirny
+
+
+    def move(self):
         self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
 
@@ -75,15 +78,21 @@ class Snake(object):
             p = c.pos[:]
             if p in self.turns:
                 turn = self.turns[p]
-                c.move(turn[0],turn[1])
+                c.setDir(turn[0],turn[1])
+                c.move()
                 if i == len(self.body)-1:
                     self.turns.pop(p)
             else:
-                if c.dirnx == -1 and c.pos[0] <= 0: c.pos = (c.rows-1, c.pos[1])
-                elif c.dirnx == 1 and c.pos[0] >= c.rows-1: c.pos = (0,c.pos[1])
-                elif c.dirny == 1 and c.pos[1] >= c.rows-1: c.pos = (c.pos[0], 0)
-                elif c.dirny == -1 and c.pos[1] <= 0: c.pos = (c.pos[0],c.rows-1)
-                else: c.move(c.dirnx,c.dirny)
+                if c.dirnx == -1 and c.pos[0] <= 0:
+                    c.pos = (c.rows-1, c.pos[1])
+                elif c.dirnx == 1 and c.pos[0] >= c.rows-1:
+                    c.pos = (0,c.pos[1])
+                elif c.dirny == 1 and c.pos[1] >= c.rows-1:
+                    c.pos = (c.pos[0], 0)
+                elif c.dirny == -1 and c.pos[1] <= 0:
+                    c.pos = (c.pos[0],c.rows-1)
+                else:
+                    c.move()
 
 
     def addCube(self):
