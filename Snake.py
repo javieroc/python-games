@@ -1,3 +1,4 @@
+import random
 import pygame
 
 width = 500
@@ -32,7 +33,7 @@ class Cube(object):
         i = self.pos[0]
         j = self.pos[1]
 
-        pygame.draw.rect(window, self.color, (i*dis+1,j*dis+1, dis-2, dis-2))
+        pygame.draw.rect(window, self.color, (i*dis+1,j*dis+1, dis-1, dis-1))
 
 
 class Snake(object):
@@ -119,8 +120,22 @@ def clearWindow():
     window.fill((0, 0, 0))
 
 
+def generateRandomPos(forbiddenPos):
+    while True:
+        x = random.randrange(rows)
+        y = random.randrange(rows)
+        # Make sure the random pos that was generated won't be a position of a part of the snake.
+        if len(list(filter(lambda z:z.pos == (x,y), forbiddenPos))) > 0:
+            continue
+        else:
+            break
+
+    return (x,y)
+
+
 def main():
     snake = Snake((255, 0, 0), (10, 10))
+    snack = Cube(generateRandomPos(snake.body), color=(0,255,0))
     clock = pygame.time.Clock()
     while True:
         pygame.time.delay(50)
@@ -129,6 +144,7 @@ def main():
         drawGrid()
         snake.move()
         snake.draw()
+        snack.draw()
         pygame.display.update()
 
 main()
