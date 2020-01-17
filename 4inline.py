@@ -102,7 +102,6 @@ def main():
                         row = get_next_free_row(board, col)
                         drop_piece(board, row, col, 2)
 
-                print(board)
                 turn += 1
                 turn = turn % 2
 
