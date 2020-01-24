@@ -189,7 +189,28 @@ def draw_window(grid):
 
 def main():
     grid = create_grid()
-    while True:
+    current_piece = get_shape()
+    next_piece = get_shape()
+    game_over = False
+    clock = pygame.time.Clock()
+    while not game_over:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    current_piece.x -= 1
+
+                if event.key == pygame.K_RIGHT:
+                    current_piece.x += 1
+
+                if event.key == pygame.K_UP:
+                    current_piece.rotation = current_piece.rotation + 1 % len(current_piece.shape)
+
+                if event.key == pygame.K_DOWN:
+                    current_piece.y += 1
+
         draw_window(grid)
 
 
