@@ -1,44 +1,37 @@
 import socket
 import random
+import pickle
 from _thread import *
 import sys
+from Player import Player
 
-positions = [(0,0), (100,100)]
+players = [Player(0,0,50,50,(255,0,0)), Player(100,100,50,50,(0,0,255))]
 
 def threaded_client(conn, player):
-    conn.send(str.encode(transform_pos(positions[player])))
+    conn.send(pickle.dumps(players[player]))
     reply = ""
     while True:
         try:
-            data = read_pos(conn.recv(2048).decode())
+            data = pickle.loads(conn.recv(2048))
 
             if not data:
                 print("Disconnected")
                 break
             else:
-                positions[player] = data
+                players[player] = data
                 if player == 1:
-                    reply = positions[0]
+                    reply = players[0]
                 else:
-                    reply = positions[1]
+                    reply = players[1]
                 print("Received: ", data)
                 print("Sending : ", reply)
 
-            conn.sendall(str.encode(transform_pos(reply)))
+            conn.sendall(pickle.dumps(reply))
         except:
             break
 
     print("Lost connection")
     conn.close()
-
-
-def read_pos(str_pos):
-    pos = str_pos.split(',')
-    return (int(pos[0]), int(pos[1]))
-
-
-def transform_pos(tup_pos):
-    return str(tup_pos[0]) + ',' + str(tup_pos[1])
 
 
 def main():
